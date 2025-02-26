@@ -2,9 +2,13 @@ import scrapy
 from pathlib import Path
 import re
 
+# THIS FILE WILL NOT WORK WITHOUT BEING WITHIN AN OPEN SCRAPY PROJECT DIRECTORY
+# IN ORDER TO RUN A SCRAPY FILE, INTEGRATED TERMINALS (SUCH AS THE ONE IN VS CODE) WILL NOT WORK
+# ANACONDA PROMPT WORKS AS A TERMINAL
+
 class Nat_Finder(scrapy.Spider):
    name = 'natfinder'
-   allowed_domains = ['archiveofourown.org']
+   allowed_domains = ['archiveofourown.org'] # not really necessary, but safety precaution for if there are webpages linked by authors or in comments
    start_urls = [
       'https://archiveofourown.org/works/search?work_search%5Bquery%5D="i%27m+french"&work_search%5Btitle%5D=&work_search%5Bcreators%5D=&work_search%5Brevised_at%5D=&work_search%5Bcomplete%5D=&work_search%5Bcrossover%5D=&work_search%5Bsingle_chapter%5D=0&work_search%5Bword_count%5D=&work_search%5Blanguage_id%5D=en&work_search%5Bfandom_names%5D=&work_search%5Brating_ids%5D=&work_search%5Bcharacter_names%5D=&work_search%5Brelationship_names%5D=&work_search%5Bfreeform_names%5D=&work_search%5Bhits%5D=&work_search%5Bkudos_count%5D=&work_search%5Bcomments_count%5D=&work_search%5Bbookmarks_count%5D=&work_search%5Bsort_column%5D=_score&work_search%5Bsort_direction%5D=desc&commit=Search',
       'https://archiveofourown.org/works/search?work_search%5Bquery%5D="i%27m+spanish"&work_search%5Btitle%5D=&work_search%5Bcreators%5D=&work_search%5Brevised_at%5D=&work_search%5Bcomplete%5D=&work_search%5Bcrossover%5D=&work_search%5Bsingle_chapter%5D=0&work_search%5Bword_count%5D=&work_search%5Blanguage_id%5D=en&work_search%5Bfandom_names%5D=&work_search%5Brating_ids%5D=&work_search%5Bcharacter_names%5D=&work_search%5Brelationship_names%5D=&work_search%5Bfreeform_names%5D=&work_search%5Bhits%5D=&work_search%5Bkudos_count%5D=&work_search%5Bcomments_count%5D=&work_search%5Bbookmarks_count%5D=&work_search%5Bsort_column%5D=_score&work_search%5Bsort_direction%5D=desc&commit=Search',
@@ -25,17 +29,18 @@ class Nat_Finder(scrapy.Spider):
       'https://archiveofourown.org/works/search?work_search%5Bquery%5D="i%27m+turkish"&work_search%5Btitle%5D=&work_search%5Bcreators%5D=&work_search%5Brevised_at%5D=&work_search%5Bcomplete%5D=&work_search%5Bcrossover%5D=&work_search%5Bsingle_chapter%5D=0&work_search%5Bword_count%5D=&work_search%5Blanguage_id%5D=en&work_search%5Bfandom_names%5D=&work_search%5Brating_ids%5D=&work_search%5Bcharacter_names%5D=&work_search%5Brelationship_names%5D=&work_search%5Bfreeform_names%5D=&work_search%5Bhits%5D=&work_search%5Bkudos_count%5D=&work_search%5Bcomments_count%5D=&work_search%5Bbookmarks_count%5D=&work_search%5Bsort_column%5D=_score&work_search%5Bsort_direction%5D=desc&commit=Search',
       'https://archiveofourown.org/works/search?work_search%5Bquery%5D="i%27m+greek"&work_search%5Btitle%5D=&work_search%5Bcreators%5D=&work_search%5Brevised_at%5D=&work_search%5Bcomplete%5D=&work_search%5Bcrossover%5D=&work_search%5Bsingle_chapter%5D=0&work_search%5Bword_count%5D=&work_search%5Blanguage_id%5D=en&work_search%5Bfandom_names%5D=&work_search%5Brating_ids%5D=&work_search%5Bcharacter_names%5D=&work_search%5Brelationship_names%5D=&work_search%5Bfreeform_names%5D=&work_search%5Bhits%5D=&work_search%5Bkudos_count%5D=&work_search%5Bcomments_count%5D=&work_search%5Bbookmarks_count%5D=&work_search%5Bsort_column%5D=_score&work_search%5Bsort_direction%5D=desc&commit=Search',
       'https://archiveofourown.org/works/search?work_search%5Bquery%5D="i%27m+hindi"&work_search%5Btitle%5D=&work_search%5Bcreators%5D=&work_search%5Brevised_at%5D=&work_search%5Bcomplete%5D=&work_search%5Bcrossover%5D=&work_search%5Bsingle_chapter%5D=0&work_search%5Bword_count%5D=&work_search%5Blanguage_id%5D=en&work_search%5Bfandom_names%5D=&work_search%5Brating_ids%5D=&work_search%5Bcharacter_names%5D=&work_search%5Brelationship_names%5D=&work_search%5Bfreeform_names%5D=&work_search%5Bhits%5D=&work_search%5Bkudos_count%5D=&work_search%5Bcomments_count%5D=&work_search%5Bbookmarks_count%5D=&work_search%5Bsort_column%5D=_score&work_search%5Bsort_direction%5D=desc&commit=Search'
-      ]
+      ] # very basic searches to begin finding fics written by ESL authors
 
+   # parse - what Scrapy actually does!
    def parse(self, response):
-      if 'search' in response.url:
-         fics = re.findall(r'/works/\d+', str(response.css("a::attr(href)").getall()))
-         for fic in fics:
+      if 'search' in response.url: # splitting spider into two parts - the initial search pages
+         fics = re.findall(r'/works/\d+', str(response.css("a::attr(href)").getall())) # finds all links to works on the given page
+         for fic in fics: # recursion! will go to 'else' statement
             if fic is not None:
                fic = response.urljoin(fic)
                yield scrapy.Request(fic, callback=self.parse)
-      else:
+      else: # - and the actual work pages
         ttl = re.search(r'\d+', response.url).group(0)
-        filename = f"work-{ttl}.html"
+        filename = f"work-{ttl}.html" # saves work out to file with the name as a substring of the work's URI
         Path(filename).write_bytes(response.body)
-        self.log(f"saved file {filename}")
+        self.log(f"saved file {filename}") # tells you what is happening in the terminal
