@@ -38,3 +38,26 @@
     [regex cheatsheet](https://www.rexegg.com/regex-quickstart.php)  
     [reminder of how to actually use regex... shh](https://www.w3schools.com/python/python_regex.asp)  
     [scrapy tutorial](https://docs.scrapy.org/en/latest/intro/tutorial.html)
+## second progress report
+### 2025-03-21
+- updated Nat_Finder.py
+    - added a few more nationalities to spider's search
+    - links spider crawls were recreated to increase human legibility
+- created file_cleaner.ipynb
+    - cleans up file data and places in dataframe
+- created data_organization.ipynb
+    - creates additional columns for dataframe
+    - finds additional information that is not directly in the html file
+- TO-DO:
+    - review Nat_Finder.py
+        - see if there are more nationalities to add
+        - have spider create subfolders with each nationality so the language data is easily accessible when creating the dataframe
+        - have spider search through additional pages, not just initial page
+    - figure out how to use scrapy
+    - create classifiers
+        - TF-IDF:
+            - word count, word length, sentence length, chapters, etc.
+        - Naive-Bayes
+            - n-grams
+            - n-grams *using scrapy POS tags*
+            - non-words used
