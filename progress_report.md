@@ -61,3 +61,25 @@
             - n-grams
             - n-grams *using scrapy POS tags*
             - non-words used
+## third progress report
+### 2025-04-04
+- updated Nat_Finder.py
+    - changed link searches to include more languages (scraped fics roughly doubled in size)
+- created overall_process.ipynb
+    - made a bunch of .md cells and put general workflow into them
+    - will create .py cells when everything is finalized
+    - (not removing other files---at least yet)
+- updated file_cleaner-1.ipynb
+    - added code to sort out fics by language
+- updated file_cleaner-2.ipynb
+    - streamlined code
+- updated data_organization.ipynb
+    - got rid of most stuff because I plan on using stanza instead of spaCy
+- TO-DO:
+    - create classifiers
+        - K-Nearest Neighbors on supervised data
+        - K-Means on unsupervised data
+        - Naive-Bayes
+    - analysis
+    - visualize data
+    - *more details available in overall_process.ipynb*
